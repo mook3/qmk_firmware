@@ -16,13 +16,16 @@ enum custom_keycodes {
 	TD_MO_2,
 	TD_MO_3,
 	TD_MO_4,
-	TD_SFT_CTL,
 	MY_RESET_KC,
-	MY_SFT_BSPC,
-	MY_CTL_TAB,
-	MY_FN_GUI,
+	SFT_BSP,
+	CTL_TAB,
 	MY_SPC_SYM,
 };
+
+// TEST TAP DANCE STRUCT ARRAY
+
+
+// END TEST
 
 enum combos {
     COMBO_LCTL,
@@ -33,6 +36,13 @@ enum combos {
     COMBO_RALT,
 	COMBO_RGUI,
 	COMBO_RCTL_ALT,
+	
+	COMBO_LCTL_SFT,
+	COMBO_LCTL_SFT_ALT,
+	COMBO_LGUI2,
+	COMBO_LGUI_SFT,
+	COMBO_LALT2,
+	COMBO_LALT_SFT,
 
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
 };
@@ -47,6 +57,14 @@ const uint16_t PROGMEM combo_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM combo_jl[] = {KC_J, KC_L, COMBO_END};
 const uint16_t PROGMEM combo_jq[] = {KC_J, KC_QUOT, COMBO_END};
 const uint16_t PROGMEM combo_jkl[] = {KC_J, KC_K, KC_L, COMBO_END};
+
+const uint16_t PROGMEM combo_fctl[] = {KC_F, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_rctl[] = {KC_R, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_dctl[] = {KC_D, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_ectl[] = {KC_E, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_sctl[] = {KC_S, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_wctl[] = {KC_W, CTL_TAB, COMBO_END};
+
 combo_t key_combos[] = {
 	// One-shot mods
 	[COMBO_LCTL] = COMBO(combo_fd, OSM(MOD_LCTL)),
@@ -57,6 +75,13 @@ combo_t key_combos[] = {
 	[COMBO_RALT] = COMBO(combo_jl, OSM(MOD_RALT)),
 	[COMBO_RGUI] = COMBO(combo_jq, OSM(MOD_RGUI)),
 	[COMBO_RCTL_ALT] = COMBO(combo_jkl, OSM(MOD_RCTL | MOD_RALT)),
+	
+	[COMBO_LCTL_SFT] = COMBO(combo_fctl, LSFT(KC_LCTL)),
+	[COMBO_LCTL_SFT_ALT] = COMBO(combo_rctl, LSFT(LCTL(KC_LALT))),
+	[COMBO_LGUI2] = COMBO(combo_dctl, KC_LGUI),
+	[COMBO_LGUI_SFT] = COMBO(combo_ectl, LSFT(KC_LGUI)),
+	[COMBO_LALT2] = COMBO(combo_sctl, KC_LALT),
+	[COMBO_LALT_SFT] = COMBO(combo_wctl, LSFT(KC_LALT)),
 	// Normal mods
 	/*[COMBO_LCTL] = COMBO(combo_fd, KC_LCTL),
 	[COMBO_LALT] = COMBO(combo_fs, KC_LALT),
@@ -92,131 +117,60 @@ void process_last_td_tap_on_expire_or_interrupt(qk_tap_dance_t* td);
 #define TD_CUSTOM_USER(kcTD, kcT, kcH, kcDH) \
 { .kc = kcTD, .kcTap = kcT, .kcHold = kcH, .kcDoubleHold = kcDH, .maxCount = kcDH ? 2 : 1}
 
-#define TD1_KC MY_SFT_BSPC
+#define TD1_KC SFT_BSP
 static qk_tap_dance_t td1 = TD_CUSTOM_USER(TD1_KC, KC_BSPC, KC_LSFT, 0);
-#define TD2_KC MY_CTL_TAB
+#define TD2_KC CTL_TAB
 static qk_tap_dance_t td2 = TD_CUSTOM_USER(TD2_KC, KC_TAB, KC_LCTL, TD_MO_4);
-#define TD3_KC MY_FN_GUI
-static qk_tap_dance_t td3 = TD_CUSTOM_USER(TD3_KC, 0, TD_MO_4, KC_LGUI);
-#define TD4_KC MY_SPC_SYM
-static qk_tap_dance_t td4 = TD_CUSTOM_USER(TD4_KC, KC_SPC, TD_MO_2, 0);
+#define TD3_KC MY_SPC_SYM
+static qk_tap_dance_t td3 = TD_CUSTOM_USER(TD3_KC, KC_SPC, TD_MO_2, 0);
 
 // TODO loop through these and use these instead of td1/td2
-//static qk_tap_dance_t user_tap_dance_actions[] = {
-//	TD_CUSTOM_USER(MY_SFT_BSPC, KC_BSPC, KC_LSFT, KC_BSPC),
-//	TD_CUSTOM_USER(MY_CTL_TAB, KC_TAB, KC_LCTL, TD_SFT_CTL),
-//	TD_CUSTOM_USER(MY_FN_GUI, 0, TD_MO_4, KC_LGUI),
-//};
+//#define NUM_TD_ACTIONS 3
+/*static qk_tap_dance_t user_tap_dance_actions[] = {
+	TD_CUSTOM_USER(SFT_BSP, KC_BSPC, KC_LSFT, KC_BSPC),
+	TD_CUSTOM_USER(MY_FN_GUI, 0, TD_MO_4, KC_LGUI),
+};*/
 
-// Tap Dance definitions - probably can get rid of this if I disable tap dancing in rules.mk?
-//qk_tap_dance_action_t tap_dance_actions[] = {};
+#define SYM_SPC LT(_SYMBOLS,KC_SPC)
+#define NUM_ENT LT(_NUMBERS,KC_ENT)
+#define TG_GAM TG(_GAMING)
 
-/* QWERTY
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * | ESC  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  `   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |LCTRL |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_QWERTY] = LAYOUT(
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 					KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_Q, KC_W, KC_E, KC_R, KC_T,									KC_Y, KC_U, KC_I, KC_O, KC_P, KC_TRNS,
-		//KC_TRNS, LGUI_T(KC_A), LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F), KC_G,	KC_H, RSFT_T(KC_J), RCTL_T(KC_K), RALT_T(KC_L), RGUI_T(KC_QUOT), KC_TRNS,
-		KC_TRNS, KC_A, KC_S, KC_D, KC_F, KC_G,									KC_H, KC_J, KC_K, KC_L, KC_QUOT, KC_TRNS,
-		KC_TRNS, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_SPC, 				   KC_TRNS, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_TRNS,
-		KC_TRNS, KC_TRNS, MY_CTL_TAB, MY_SFT_BSPC,								LT(_SYMBOLS,KC_SPC), LT(_NUMBERS,KC_ENT), KC_TRNS /*LALT_T(KC_ESC)*/, KC_TRNS),
+_______, _______, _______, _______, _______, _______, 					 _______, _______, _______, _______, _______, _______,
+_______, KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,					 KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , _______,
+//_______, LGUI_T(KC_A), LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F), KC_G,	KC_H, RSFT_T(KC_J), RCTL_T(KC_K), RALT_T(KC_L), RGUI_T(KC_QUOT), _______,
+_______, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,					 KC_H   , KC_J   , KC_K   , KC_L   , KC_QUOT, _______,
+_______, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , _______, 	_______, KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, _______,
+				  _______, _______, CTL_TAB, SFT_BSP,					 SYM_SPC, NUM_ENT, _______, _______),
 
-/* GAMING
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * | ESC  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  `   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |LCTRL |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
 	[_GAMING] = LAYOUT(
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 					KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MY_RESET_KC,
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 					KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_A, KC_S, KC_D, KC_F, KC_G, 									KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, TG(_GAMING),
-		KC_TRNS, KC_TRNS, KC_TAB, KC_BSPC,										KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+_______, _______, _______, _______, _______, _______, 					 _______, _______, _______, _______, _______, MY_RESET_KC,
+_______, _______, _______, _______, _______, _______, 					 _______, _______, _______, _______, _______, _______,
+_______, _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______, _______,
+_______, _______, _______, _______, _______, _______, _______,	_______, _______, _______, _______, _______, _______, TG_GAM ,
+				  _______, _______, KC_TAB , KC_BSPC,					 _______, _______, _______, _______),
 
-/* QWERTY
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * | ESC  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  `   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |LCTRL |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
 	[_SYMBOLS] = LAYOUT(
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,					KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_AMPR, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, 					KC_TRNS, KC_COLN, KC_HASH, KC_CIRC, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_EXLM, KC_EQL, KC_PMNS, KC_LPRN, KC_RPRN, 					KC_TRNS, KC_SCLN, KC_DLR, KC_AT, KC_PERC, KC_TRNS,
-		KC_TRNS, KC_PIPE, KC_ASTR, KC_TILD, KC_LBRC, KC_RBRC, KC_TRNS, KC_TRNS, KC_TRNS, KC_GRV, KC_LT, KC_GT, KC_BSLS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, 									KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+_______, _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______, _______,
+_______, KC_AMPR, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, 					 _______, KC_COLN, KC_HASH, KC_CIRC, _______, _______,
+_______, KC_EXLM, KC_EQL , KC_PMNS, KC_LPRN, KC_RPRN, 					 _______, KC_SCLN, KC_DLR , KC_AT  , KC_PERC, _______,
+_______, KC_PIPE, KC_ASTR, KC_TILD, KC_LBRC, KC_RBRC, _______,	_______, _______, KC_GRV , KC_LT  , KC_GT  , KC_BSLS, _______,
+				  _______, _______, _______, _______,					 _______, _______, _______, _______),
 
-/* QWERTY
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * | ESC  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  `   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |LCTRL |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
 	[_NUMBERS] = LAYOUT(
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,				KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_1, KC_2, KC_3, KC_PMNS,						KC_TRNS, KC_HOME, KC_UP, KC_END, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_0, KC_4, KC_5, KC_6, KC_DOT, 							KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_7, KC_8, KC_9, KC_PENT, KC_TRNS, 	   KC_TRNS, KC_TRNS, KC_ESC, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,									KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+_______, _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______, _______,
+_______, _______, KC_1   , KC_2   , KC_3   , KC_PMNS,					 _______, KC_HOME, KC_UP  , KC_END , _______, _______,
+_______, KC_0   , KC_4   , KC_5   , KC_6   , KC_DOT , 					 _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL , _______,
+_______, _______, KC_7   , KC_8   , KC_9   , KC_PENT, _______,	_______, _______, KC_WH_U, KC_ESC , KC_WH_D, _______, _______,
+				  _______, _______, _______, _______,					 _______, _______, _______, _______),
 
-/* FN
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |GAMING|      |      |      |      |      |                    |      |      |      |      |      |RESET |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |  F1  |  F2  |  F3  |  F10 |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |  F4  |  F5  |  F6  |  F11 |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |  F7  |  F8  |  F9  |  F12 |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
 	[_FN] = LAYOUT(
-		TG(_GAMING), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,			KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_F1, KC_F2, KC_F3, KC_F10,						KC_BRIU, KC_BRID, KC_VOLD, KC_MUTE, KC_VOLU, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_F4, KC_F5, KC_F6, KC_F11, 						KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_F7, KC_F8, KC_F9, KC_F12, KC_TRNS, 			KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-		KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,									KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS)
+TG_GAM , _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______, _______,
+_______, _______, KC_F1  , KC_F2  , KC_F3  , KC_F10 ,					 KC_BRIU, KC_BRID, KC_VOLD, KC_MUTE, KC_VOLU, _______,
+_______, _______, KC_F4  , KC_F5  , KC_F6  , KC_F11 , 					 _______, _______, _______, _______, _______, _______,
+_______, _______, KC_F7  , KC_F8  , KC_F9  , KC_F12 , _______,	_______, _______, _______, _______, _______, _______, _______,
+				  _______, _______, _______, _______,					 _______, _______, _______, _______),
 };
 
 //SSD1306 OLED update loop, make sure to enable OLED_ENABLE=yes in rules.mk
@@ -319,8 +273,8 @@ char * get_pretty_kc(uint16_t keycode) {
 		case RCTL_T(KC_K): return "K/Ctl";
 		case RALT_T(KC_L): return "L/Alt";
 		case RGUI_T(KC_QUOT): return "'/Gui";
-		case MY_CTL_TAB: return "Tab/Ctl/Fn";
-		case MY_SFT_BSPC: return "Back/Sft";
+		case CTL_TAB: return "Tab/Ctl/Fn";
+		case SFT_BSP: return "Back/Sft";
 		case LT(_SYMBOLS,KC_SPC): return "Spc/Sym";
 		case LT(_NUMBERS,KC_ENT): return "Ent/Num";
 		default:
@@ -329,15 +283,15 @@ char * get_pretty_kc(uint16_t keycode) {
 	}
 }
 
-uint16_t last_time = 0;
 void debug_process_record_user(uint16_t keycode, keyrecord_t* record) {
-    uprintf("KL: %11s %4s, %5ums, %ux%u, time: %5u, int: %u, count: %u\n", 
+	static uint16_t last_time = 0;
+    uprintf("KL: %11s %4s, %5ums, %ux%u, time: %5u, int: %u, count: %u, layer: %u\n", 
 			get_pretty_kc(keycode), record->event.pressed ? "down" : "up",
 			record->event.time - last_time, record->event.key.col, record->event.key.row, 
-			record->event.time, record->tap.interrupted, record->tap.count);
+			record->event.time, record->tap.interrupted, record->tap.count, layer_state);
 	last_time = record->event.time;
 }
-#endif
+#endif // CONSOLE_ENABLE
 
 void reset_td(qk_tap_dance_t* td) {
 	td->count = 0;
@@ -489,7 +443,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 	process_td_interrupt_on_process_record(keycode, &td1);
 	process_td_interrupt_on_process_record(keycode, &td2);
 	process_td_interrupt_on_process_record(keycode, &td3);
-	process_td_interrupt_on_process_record(keycode, &td4);
 
     // Process custom tap dances
     switch (keycode) {
@@ -501,9 +454,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 			return false;
         case TD3_KC:
             user_tap_dance(&td3, keycode, record);
-			return false;
-        case TD4_KC:
-            user_tap_dance(&td4, keycode, record);
 			return false;
 		case MY_RESET_KC:
 			reset_keyboard();
@@ -541,7 +491,6 @@ void matrix_scan_user(void) {
 	process_td_on_matrix_scan(&td1);
 	process_td_on_matrix_scan(&td2);
 	process_td_on_matrix_scan(&td3);
-	process_td_on_matrix_scan(&td4);
 }
 
 /*bool is_home_row_mod(uint16_t keycode) {
@@ -587,8 +536,7 @@ bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 // and is used in here for second version
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-		case MY_CTL_TAB:
-		case MY_FN_GUI:
+		case CTL_TAB:
             return 230;
         default:
 		    /*if (is_home_row_mod(keycode)) {
@@ -635,3 +583,49 @@ bool process_td_kc_user(bool pressed, uint16_t kc, qk_tap_dance_t* td) {
 	return true;
 }
 
+bool is_mod_loading_combo(uint16_t index) {
+	switch (index) {
+		case COMBO_LCTL_SFT:
+		case COMBO_LCTL_SFT_ALT:
+		case COMBO_LGUI2:
+		case COMBO_LGUI_SFT:
+		case COMBO_LALT2:
+		case COMBO_LALT_SFT:
+			return true;
+		default:
+			return false;
+	}
+}
+
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+	if (is_mod_loading_combo(index)) {
+		return 300;
+	}
+    //if (combo->keys[1] == CTL_TAB) {
+    //    return 1000;
+    //}
+    return COMBO_TERM;
+}
+
+bool get_combo_must_press_in_order(uint16_t index, combo_t *combo) {
+	if (is_mod_loading_combo(index)) {
+		return true;
+	}
+	/*if (combo->keys[1] == CTL_TAB) {
+        return true;
+    }*/
+	return false;
+}
+
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+	if (layer_state_is(_GAMING)) {
+		return false;
+	}
+	if (is_mod_loading_combo(combo_index) && get_mods()) {
+		return false;
+	}
+	/*if (combo->keys[1] == CTL_TAB && get_mods()) {
+		return false;
+	}*/
+	return true;
+}

@@ -32,9 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM_PER_KEY
 #define TAPPING_TERM 100
 
-#define COMBO_TERM 35        // how quickly all combo keys must be pressed in succession to trigger
+#define COMBO_TERM 45        // how quickly all combo keys must be pressed in succession to trigger
 //#define COMBO_MUST_HOLD_MODS // if a combo triggers a modifier, only trigger when the combo is held
 //#define COMBO_HOLD_TERM 175  // how long at least one of the combo keys must be held to trigger
+#define COMBO_TERM_PER_COMBO
+#define COMBO_MUST_PRESS_IN_ORDER_PER_COMBO	
+#define COMBO_SHOULD_TRIGGER
 
 #undef RGBLED_NUM
 #define RGBLIGHT_ANIMATIONS
