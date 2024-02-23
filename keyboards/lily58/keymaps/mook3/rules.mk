@@ -14,6 +14,7 @@ COMBO_ENABLE = yes
 
 # If you want to change the display of OLED, you need to change here
 SRC +=  ./lib/logo_reader.c \
+		#./mook3_combos.c \
 		#./lib/keylogger.c \
 		# ./lib/layer_state_reader.c \
         # ./lib/mode_icon_reader.c \
