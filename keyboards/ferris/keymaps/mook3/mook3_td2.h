@@ -48,18 +48,8 @@ uint16_t idx_to_count(uint16_t idx) {
 }
 
 uint16_t count_to_idx(uint16_t count, bool hold) {
-	// hold could just be td->count * 2 - 1
 	uint16_t idx = (count - 1) * 2;
 	return hold ? idx + 1 : idx;
-}
-
-uint16_t get_highest_kc_idx(qk_tap_dance_t* td, bool hold) {
-	for (uint8_t index = count_to_idx(td->count, hold); index >= 0; index -= 2) {
-		if (index <= td->maxKcIdx && td->kcs[index] != KC_TRNS) {
-			return index;
-		}
-	}
-	return -1;
 }
 
 void process_td_press(qk_tap_dance_t* td, keyrecord_t* record) {
@@ -72,8 +62,8 @@ void process_td_press(qk_tap_dance_t* td, keyrecord_t* record) {
 		td->count = 1;
 	}
 	// Only tap if maxTapIdx > maxHoldIdx && maxTapCount >= count
-	for (uint8_t index = count_to_idx(td->count, true); index >= 0; index--) {
-		if (index <= td->maxKcIdx && td->kcs[index] != KC_TRNS) {
+	for (uint8_t index = td->count * 2 - 1; index >= 0; index--) {
+		if (index <= td->maxKcIdx && td->kcs[index]) {
 			if (index % 2 == 1 || index == td->maxKcIdx) {
 				// hold, or tap that's highest td action
 				process_td_kc_user(true, td->kcs[index], td);
@@ -81,37 +71,66 @@ void process_td_press(qk_tap_dance_t* td, keyrecord_t* record) {
 			}
 		}
 	}
+	/*
+	switch (td->count) {
+		case 1:
+			if (td->kcs[1]) {
+				// Start hold action immediately
+				process_td_kc_user(true, td->kcs[1], td);
+			} else if (td->kcs[0] && td->maxCount == 1) {
+				// Only a single-tap action exists for this tap dance, so we know we can do that right away (TODO why would this ever be a tap dance though...)
+				process_td_kc_user(true, td->kcs[0], td);
+			}
+			break;
+		case 2:
+		default:
+			process_td_kc_user(true, td->kcs[td->maxKcIdx], td);
+			break;
+	}
+	*/
 	// TODO use record->event.time instead of timer_read? (just for perf)
 	td->timer = timer_read();
 }
 
-void do_catch_up_taps(qk_tap_dance_t* td, uint16_t tap_idx) {
-	if (tap_idx >= 0) {
-		uint16_t tap_count = idx_to_count(tap_idx);
-		for (uint8_t i = tap_count; i <= td->count; i++) {
-			tap_code(td->kcs[tap_idx]);
-		}
-	}
-}
-
 void process_td_release(qk_tap_dance_t* td, keyrecord_t* record) {
 	uint16_t lastActive = KC_TRNS;
-	if (td->kcActive != KC_TRNS) {
-		lastActive = td->kcActive;
+	if (td->kcActive) {
 		process_td_kc_user(false, td->kcActive, td);
+		lastActive = td->kcActive;
 	}
 	if (timer_elapsed(td->timer) >= get_tapping_term(td->kc, record) || td->otherKeyPressedDuringHold) {
 		// Released hold, so tap dance is done
 		reset_td(td);
 	} else if (td->count >= td->maxCount) {
 		// Tap dance key was tapped and we don't have to wait for higher count tap/holds, so process it if we didn't already on key press
-		uint16_t highest_tap_idx = get_highest_kc_idx(td, false);
-		if (highest_tap_idx >= 0 && td->kcs[highest_tap_idx] != lastActive) {
-			// When we first hit max count and know that we are just tapping, need to do all taps up until then
-			if (td->count == td->maxCount) {
-				do_catch_up_taps(td, highest_tap_idx);
-			} else {
-				tap_code(td->kcs[highest_tap_idx]);
+		switch (td->count) {
+			case 1:
+				if (td->kcs[0] && lastActive != td->kcs[0]) {
+					tap_code(td->kcs[0]);
+				}
+				break;
+			case 2:
+			default: {
+				if (td->maxKcIdx >= 2 && td->kcs[2]) {
+					if (lastActive != td->kcs[2]) {
+						tap_code(td->kcs[2]);
+						if (td->count == td->maxCount) {
+							// When we first hit max count and know that we are just tapping, need to do all taps up until then (-1 for above tap and -1 since double tap starts on second tap, so start at 2)
+							for (int i = 2; i < td->count; i++) {
+								tap_code(td->kcs[0]);
+							}
+						}
+					}
+				} else if (td->kcs[0] && lastActive != td->kcs[0]) {
+					tap_code(td->kcs[0]);
+					if (td->count == td->maxCount) {
+						// When we first hit max count and know that we are just tapping, need to do all "max count" taps (-1 for above tap so start at 1)
+						for (int i = 1; i < td->count; i++) {
+							tap_code(td->kcs[0]);
+						}
+					}
+				}
+				break;
 			}
 		}
 		td->timer = timer_read();
@@ -125,9 +144,26 @@ void process_td_release(qk_tap_dance_t* td, keyrecord_t* record) {
  * single tap. Same thing on 3rd+ press. Maybe make configurable like how QMK's tap dancing has get_tapping_force_hold
  */
 void process_last_td_tap_on_expire_or_interrupt(qk_tap_dance_t* td) {
-	// Tap dance ended while not being held (interrupted or expired), last release was within tapping term - process the tap for that release if we didn't already (would have already known to do tap on release if >= maxCount)
+	// Tap dance ended while not being held (interrupted or expired), last release was within tapping term - process the tap for that release if we didn't already
 	if (td->count < td->maxCount) {
-		do_catch_up_taps(td, get_highest_kc_idx(td, false));
+		// TODO may be able to share code between here and process_td_release's tap block above
+		switch (td->count) {
+		case 1:
+			tap_code(td->kcs[0]);
+			break;
+		case 2:
+		default:
+			// Never possible to hit this case currently since 2+ can't be less than max count
+			if (td->maxKcIdx >= 2 && td->kcs[2]) {
+				// In theory could need more taps if maxCount > 2
+				tap_code(td->kcs[2]);
+			} else if (td->kcs[0]) {
+				// In theory could need more taps if maxCount > 2
+				tap_code(td->kcs[0]);
+				tap_code(td->kcs[0]);
+			}
+			break;
+		}
 	}
 	reset_td(td);
 }
@@ -178,7 +214,7 @@ void matrix_scan_user_tds(void) {
 				// Tapped and released (any number of times) and then held. TD only has single tap/hold and no double actions and no other keys pressed within term -> switch key from hold to tap. I think this is primarily for backspace/shift key to allow you to hold backspace by tapping it first?
 				if (td->maxCount == 1 && !td->otherKeyPressedDuringHold) {
 					// Need to only do this if another key hasn't been pressed while it's been held
-					if (td->kcs[1] != KC_TRNS && td->kcs[0] != KC_TRNS && td->kcActive == td->kcs[1]) {
+					if (td->kcs[1] && td->kcs[0] && td->kcActive == td->kcs[1]) {
 						process_td_kc_user(false, td->kcs[1], td);
 						process_td_kc_user(true, td->kcs[0], td);
 					}
