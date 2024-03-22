@@ -4,6 +4,7 @@
 #include "mook3_layers.h"
 
 enum combos {
+	/*
     COMBO_LCTL,
     COMBO_LALT,
 	COMBO_LGUI,
@@ -12,6 +13,7 @@ enum combos {
     COMBO_RALT,
 	COMBO_RGUI,
 	COMBO_RCTL_ALT,
+	*/
 	
 	COMBO_LCTL_SFT,
 	COMBO_LCTL_SFT_ALT,
@@ -19,12 +21,14 @@ enum combos {
 	COMBO_LGUI_SFT,
 	COMBO_LALT2,
 	COMBO_LALT_SFT,
+	COMBO_FN,
 
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
 // TODO disable combos for gaming layer - just have it use other keycodes that alias for these?
+/*
 const uint16_t PROGMEM combo_fd[] = {KC_F, KC_D, COMBO_END};
 const uint16_t PROGMEM combo_fs[] = {KC_F, KC_S, COMBO_END};
 const uint16_t PROGMEM combo_fa[] = {KC_F, KC_A, COMBO_END};
@@ -33,6 +37,7 @@ const uint16_t PROGMEM combo_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM combo_jl[] = {KC_J, KC_L, COMBO_END};
 const uint16_t PROGMEM combo_jq[] = {KC_J, KC_QUOT, COMBO_END};
 const uint16_t PROGMEM combo_jkl[] = {KC_J, KC_K, KC_L, COMBO_END};
+*/
 
 const uint16_t PROGMEM combo_fctl[] = {KC_F, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_rctl[] = {KC_R, CTL_TAB, COMBO_END};
@@ -40,9 +45,11 @@ const uint16_t PROGMEM combo_dctl[] = {KC_D, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_ectl[] = {KC_E, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_sctl[] = {KC_S, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_wctl[] = {KC_W, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_actl[] = {KC_A, CTL_TAB, COMBO_END};
 
 combo_t key_combos[] = {
 	// One-shot mods
+	/*
 	[COMBO_LCTL] = COMBO(combo_fd, OSM(MOD_LCTL)),
 	[COMBO_LALT] = COMBO(combo_fs, OSM(MOD_LALT)),
 	[COMBO_LGUI] = COMBO(combo_fa, OSM(MOD_LGUI)),
@@ -51,6 +58,7 @@ combo_t key_combos[] = {
 	[COMBO_RALT] = COMBO(combo_jl, OSM(MOD_RALT)),
 	[COMBO_RGUI] = COMBO(combo_jq, OSM(MOD_RGUI)),
 	[COMBO_RCTL_ALT] = COMBO(combo_jkl, OSM(MOD_RCTL | MOD_RALT)),
+	*/
 	
 	[COMBO_LCTL_SFT] = COMBO(combo_fctl, LSFT(KC_LCTL)),
 	[COMBO_LCTL_SFT_ALT] = COMBO(combo_rctl, LSFT(LCTL(KC_LALT))),
@@ -58,6 +66,7 @@ combo_t key_combos[] = {
 	[COMBO_LGUI_SFT] = COMBO(combo_ectl, LSFT(KC_LGUI)),
 	[COMBO_LALT2] = COMBO(combo_sctl, KC_LALT),
 	[COMBO_LALT_SFT] = COMBO(combo_wctl, LSFT(KC_LALT)),
+	[COMBO_FN] = COMBO(combo_actl, MO(_FN)),
 	// Normal mods
 	/*[COMBO_LCTL] = COMBO(combo_fd, KC_LCTL),
 	[COMBO_LALT] = COMBO(combo_fs, KC_LALT),
@@ -77,6 +86,7 @@ bool is_mod_loading_combo(uint16_t index) {
 		case COMBO_LGUI_SFT:
 		case COMBO_LALT2:
 		case COMBO_LALT_SFT:
+		case COMBO_FN:
 			return true;
 		default:
 			return false;
@@ -85,7 +95,7 @@ bool is_mod_loading_combo(uint16_t index) {
 
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
 	if (is_mod_loading_combo(index)) {
-		return 300;
+		return 150;
 	}
     //if (combo->keys[1] == CTL_TAB) {
     //    return 1000;

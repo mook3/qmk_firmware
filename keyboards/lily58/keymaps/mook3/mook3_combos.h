@@ -91,7 +91,7 @@ bool is_mod_loading_combo(uint16_t index) {
 
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
 	if (is_mod_loading_combo(index)) {
-		return 250;
+		return 150;
 	}
     //if (combo->keys[1] == CTL_TAB) {
     //    return 1000;

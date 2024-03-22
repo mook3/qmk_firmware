@@ -12,21 +12,6 @@
 #include "mook3_oled.h"
 #endif
 
-// TEST TAP DANCE STRUCT ARRAY
-
-
-// END TEST
-
-// TD_* are for both, MY_* are for second only
-
-
-// TODO loop through these and use these instead of td1/td2
-//#define NUM_TD_ACTIONS 3
-/*static qk_tap_dance_t user_tap_dance_actions[] = {
-	TD_CUSTOM_USER(SFT_BSP, KC_BSPC, KC_LSFT, KC_BSPC),
-	TD_CUSTOM_USER(MY_FN_GUI, 0, TD_MO_4, KC_LGUI),
-};*/
-
 #define SYM_SPC LT(_SYMBOLS,KC_SPC)
 #define NUM_ENT LT(_NUMBERS,KC_ENT)
 #define TG_GAM TG(_GAMING)
@@ -50,7 +35,7 @@ _______, _______, _______, _______, _______, _______, _______,	_______, _______,
 	[_SYMBOLS] = LAYOUT(
 _______, _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______, _______,
 _______, KC_AMPR, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, 					 _______, KC_COLN, KC_HASH, KC_CIRC, _______, _______,
-_______, KC_EXLM, KC_EQL , KC_PMNS, KC_LPRN, KC_RPRN, 					 _______, KC_SCLN, KC_DLR , KC_AT  , KC_PERC, _______,
+_______, KC_EXLM, KC_EQL , KC_PMNS, KC_LPRN, KC_RPRN, 					 _______, KC_SCLN, _______, _______, _______, _______,
 _______, KC_PIPE, KC_ASTR, KC_TILD, KC_LBRC, KC_RBRC, _______,	_______, _______, KC_GRV , KC_LT  , KC_GT  , KC_BSLS, _______,
 				  _______, _______, _______, _______,					 _______, _______, _______, _______),
 

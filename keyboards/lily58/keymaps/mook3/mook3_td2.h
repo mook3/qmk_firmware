@@ -230,7 +230,8 @@ bool process_td_kc_user(bool pressed, uint16_t kc, qk_tap_dance_t* td) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 		case CTL_TAB:
-            return 230;
+            //return 230;
+			return 200;
         default:
 		    /*if (is_home_row_mod(keycode)) {
 				return 200;
