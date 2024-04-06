@@ -19,8 +19,8 @@ typedef struct {
 
 const uint16_t td1_kcs[] = { KC_BSPC, KC_LSFT };
 static qk_tap_dance_t td1 = { .kc = SFT_BSP, .kcs = td1_kcs, .maxCount = 1, .maxKcIdx = 1 };
-const uint16_t td2_kcs[] = { KC_TAB, KC_LCTL, _______, TD_MO_4 };
-static qk_tap_dance_t td2 = { .kc = CTL_TAB, .kcs = td2_kcs, .maxCount = 2, .maxKcIdx = 3 };
+const uint16_t td2_kcs[] = { KC_TAB, KC_LCTL };//, _______, TD_MO_4 };
+static qk_tap_dance_t td2 = { .kc = CTL_TAB, .kcs = td2_kcs, .maxCount = 1, .maxKcIdx = 1 };
 
 #define NUM_TDS 2
 qk_tap_dance_t * custom_tds[] = {
@@ -231,7 +231,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 		case CTL_TAB:
             //return 230;
-			return 170;
+			return 200;
         default:
 		    /*if (is_home_row_mod(keycode)) {
 				return 200;

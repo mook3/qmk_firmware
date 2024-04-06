@@ -20,3 +20,5 @@ enum custom_keycodes {
 	CTL_TAB,
 	MY_SPC_SYM,
 };
+
+static uint16_t custom_idle_timer = 0;

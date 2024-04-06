@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define EE_HANDS
 
 #define PERMISSIVE_HOLD
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-#define TAPPING_FORCE_HOLD_PER_KEY
+//#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+//#define TAPPING_FORCE_HOLD_PER_KEY
 #define TAPPING_TERM_PER_KEY
 #define TAPPING_TERM 100
 

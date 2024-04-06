@@ -27,7 +27,6 @@ enum combos {
 };
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
-// TODO disable combos for gaming layer - just have it use other keycodes that alias for these?
 /*
 const uint16_t PROGMEM combo_fd[] = {KC_F, KC_D, COMBO_END};
 const uint16_t PROGMEM combo_fs[] = {KC_F, KC_S, COMBO_END};
@@ -95,7 +94,7 @@ bool is_mod_loading_combo(uint16_t index) {
 
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
 	if (is_mod_loading_combo(index)) {
-		return 150;
+		return 250;
 	}
     //if (combo->keys[1] == CTL_TAB) {
     //    return 1000;
@@ -115,6 +114,12 @@ bool get_combo_must_press_in_order(uint16_t index, combo_t *combo) {
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
 	if (layer_state_is(_GAMING)) {
+		return false;
+	}
+	if (timer_elapsed(custom_idle_timer) < 150) {
+		// Keyboard must have been idle for configured amount of time for combos to work.
+		// This disables combo when fast typing, mostly to remove input delay by allowing
+		// keys to be registered on keydown rather than keyup.
 		return false;
 	}
 	if (is_mod_loading_combo(combo_index) && get_mods()) {
