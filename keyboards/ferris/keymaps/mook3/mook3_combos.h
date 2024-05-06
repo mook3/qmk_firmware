@@ -22,9 +22,14 @@ enum combos {
 	COMBO_LALT2,
 	COMBO_LALT_SFT,
 	COMBO_FN,
+	
+	COMBO_LALT_SFT2,
+	COMBO_LGUI_SFT2,
+	COMBO_LCTL_SFT2,
 
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
 };
+uint16_t MOD_LOADING_COMBOS_START_IDX = COMBO_LCTL_SFT;
 uint16_t COMBO_LEN = COMBO_LENGTH;
 
 /*
@@ -46,6 +51,10 @@ const uint16_t PROGMEM combo_sctl[] = {KC_S, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_wctl[] = {KC_W, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_actl[] = {KC_A, CTL_TAB, COMBO_END};
 
+const uint16_t PROGMEM combo_ssft[] = {KC_S, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_dsft[] = {KC_D, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_fsft[] = {KC_F, SFT_BSP, COMBO_END};
+
 combo_t key_combos[] = {
 	// One-shot mods
 	/*
@@ -59,13 +68,17 @@ combo_t key_combos[] = {
 	[COMBO_RCTL_ALT] = COMBO(combo_jkl, OSM(MOD_RCTL | MOD_RALT)),
 	*/
 	
-	[COMBO_LCTL_SFT] = COMBO(combo_fctl, LSFT(KC_LCTL)),
+	[COMBO_LCTL_SFT] = COMBO(combo_fctl, MO(_FN)),
 	[COMBO_LCTL_SFT_ALT] = COMBO(combo_rctl, LSFT(LCTL(KC_LALT))),
 	[COMBO_LGUI2] = COMBO(combo_dctl, KC_LGUI),
 	[COMBO_LGUI_SFT] = COMBO(combo_ectl, LSFT(KC_LGUI)),
 	[COMBO_LALT2] = COMBO(combo_sctl, KC_LALT),
 	[COMBO_LALT_SFT] = COMBO(combo_wctl, LSFT(KC_LALT)),
 	[COMBO_FN] = COMBO(combo_actl, MO(_FN)),
+	
+	[COMBO_LALT_SFT2] = COMBO(combo_ssft, LSFT(KC_LALT)),
+	[COMBO_LGUI_SFT2] = COMBO(combo_dsft, LSFT(KC_LGUI)),
+	[COMBO_LCTL_SFT2] = COMBO(combo_fsft, LSFT(KC_LCTL)),
 	// Normal mods
 	/*[COMBO_LCTL] = COMBO(combo_fd, KC_LCTL),
 	[COMBO_LALT] = COMBO(combo_fs, KC_LALT),
@@ -78,27 +91,14 @@ combo_t key_combos[] = {
 };
 
 bool is_mod_loading_combo(uint16_t index) {
-	switch (index) {
-		case COMBO_LCTL_SFT:
-		case COMBO_LCTL_SFT_ALT:
-		case COMBO_LGUI2:
-		case COMBO_LGUI_SFT:
-		case COMBO_LALT2:
-		case COMBO_LALT_SFT:
-		case COMBO_FN:
-			return true;
-		default:
-			return false;
-	}
+	//return index >= MOD_LOADING_COMBOS_START_IDX && index < COMBO_LEN;
+	return true;
 }
 
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
 	if (is_mod_loading_combo(index)) {
 		return 250;
 	}
-    //if (combo->keys[1] == CTL_TAB) {
-    //    return 1000;
-    //}
     return COMBO_TERM;
 }
 
@@ -106,9 +106,6 @@ bool get_combo_must_press_in_order(uint16_t index, combo_t *combo) {
 	if (is_mod_loading_combo(index)) {
 		return true;
 	}
-	/*if (combo->keys[1] == CTL_TAB) {
-        return true;
-    }*/
 	return false;
 }
 
@@ -116,7 +113,7 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
 	if (layer_state_is(_GAMING)) {
 		return false;
 	}
-	if (timer_elapsed(custom_idle_timer) < 150) {
+	if (combo_index != COMBO_LCTL_SFT2 && timer_elapsed(custom_idle_timer) < 150) {
 		// Keyboard must have been idle for configured amount of time for combos to work.
 		// This disables combo when fast typing, mostly to remove input delay by allowing
 		// keys to be registered on keydown rather than keyup.
@@ -125,8 +122,5 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
 	if (is_mod_loading_combo(combo_index) && get_mods()) {
 		return false;
 	}
-	/*if (combo->keys[1] == CTL_TAB && get_mods()) {
-		return false;
-	}*/
 	return true;
 }

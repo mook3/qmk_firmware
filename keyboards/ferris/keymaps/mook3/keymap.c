@@ -1,7 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "mook3_layers.h"
 #include "mook3_combos.h"
-#include "mook3_td2.h"
+#include "mook3_td.h"
 
 #ifdef CONSOLE_ENABLE
 #include "mook3_console.h"
@@ -23,6 +23,8 @@
 
 #define CTL_SCL RCTL_T(KC_SCLN)
 
+//Flash command: qmk flash -kb ferris/sweep -km mook3 -bl uf2-split-left -e CONVERT_TO=promicro_rp2040
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_QWERTY] = LAYOUT(
 KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,					 KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   ,
@@ -35,7 +37,7 @@ KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , 			 		 KC_N   , KC_M   , KC_COMM, K
 _______, _______, _______, _______, _______, 					 _______, _______, _______, _______, _______,
 _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______,
 _______, _______, _______, _______, _______,					 _______, _______, _______, _______, TG_GAM ,
-									KC_TAB , KC_SPC ,  _______, _______),
+									KC_BSPC , KC_SPC ,  _______, _______),
 
 	[_SYMBOLS] = LAYOUT(
 KC_AMPR, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, 					 _______, KC_COLN, _______, _______, _______,
@@ -44,15 +46,15 @@ KC_PIPE, KC_ASTR, KC_TILD, KC_LBRC, KC_RBRC,					 _______, KC_GRV , KC_LT  , KC_
 									_______, _______,  _______, _______),
 
 	[_NUMBERS] = LAYOUT(
-_______, KC_1   , KC_2   , KC_3   , KC_PMNS,					 KC_WH_U, KC_HOME, KC_UP  , KC_END , _______,
+_______, KC_1   , KC_2   , KC_3   , KC_PMNS,					 KC_WH_U, KC_HOME, KC_UP  , KC_END , TG(_FN),
 KC_0   , KC_4   , KC_5   , KC_6   , _______, 					 KC_WH_D, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL ,
 _______, KC_7   , KC_8   , KC_9   , KC_PENT, 					 _______, KC_TAB , KC_ESC , _______, _______,
 									_______, _______,  _______, _______),
 
 	[_FN] = LAYOUT(
-_______, KC_F1  , KC_F2  , KC_F3  , KC_F10 ,					 KC_BRIU, KC_BRID, KC_VOLD, KC_MUTE, KC_VOLU,
-_______, KC_F4  , KC_F5  , KC_F6  , KC_F11 , 					 _______, _______, _______, _______, _______,
-_______, KC_F7  , KC_F8  , KC_F9  , KC_F12 ,					 _______, _______, _______, _______, TG_GAM,
+_______, KC_F1  , KC_F2  , KC_F3  , KC_F10 ,					 KC_BRIU, KC_VOLU, _______, _______, TG(_FN),
+_______, KC_F4  , KC_F5  , KC_F6  , KC_F11 , 					 KC_BRID, KC_VOLD, _______, _______, _______,
+_______, KC_F7  , KC_F8  , KC_F9  , KC_F12 ,					 _______, KC_MUTE, _______, _______, TG_GAM,
 									_______, _______,  _______, _______),
 };
 
