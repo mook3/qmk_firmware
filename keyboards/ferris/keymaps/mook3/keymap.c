@@ -41,18 +41,18 @@ _______, _______, _______, _______, _______,					 _______, _______, _______, ___
 
 	[_SYMBOLS] = LAYOUT(
 KC_AMPR, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, 					 _______, KC_COLN, _______, _______, _______,
-FN_EXLM, ALT_EQL, GUI_MNS, CTL_LPR, KC_RPRN, 					 _______, CTL_SCL, KC_RGUI, KC_RALT, MO(_FN),
+FN_EXLM, ALT_EQL, GUI_MNS, CTL_LPR, KC_RPRN, 					 _______, KC_SCLN, KC_DLR , KC_AT  , KC_PERC,
 KC_PIPE, KC_ASTR, KC_TILD, KC_LBRC, KC_RBRC,					 _______, KC_GRV , KC_LT  , KC_GT  , KC_BSLS,
 									_______, _______,  _______, _______),
 
 	[_NUMBERS] = LAYOUT(
-_______, KC_1   , KC_2   , KC_3   , KC_PMNS,					 KC_WH_U, KC_HOME, KC_UP  , KC_END , TG(_FN),
+_______, KC_1   , KC_2   , KC_3   , KC_PMNS,					 KC_WH_U, KC_HOME, KC_UP  , KC_END , _______,
 KC_0   , KC_4   , KC_5   , KC_6   , _______, 					 KC_WH_D, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL ,
 _______, KC_7   , KC_8   , KC_9   , KC_PENT, 					 _______, KC_TAB , KC_ESC , _______, _______,
 									_______, _______,  _______, _______),
 
 	[_FN] = LAYOUT(
-_______, KC_F1  , KC_F2  , KC_F3  , KC_F10 ,					 KC_BRIU, KC_VOLU, _______, _______, TG(_FN),
+_______, KC_F1  , KC_F2  , KC_F3  , KC_F10 ,					 KC_BRIU, KC_VOLU, _______, _______, _______,
 _______, KC_F4  , KC_F5  , KC_F6  , KC_F11 , 					 KC_BRID, KC_VOLD, _______, _______, _______,
 _______, KC_F7  , KC_F8  , KC_F9  , KC_F12 ,					 _______, KC_MUTE, _______, _______, TG_GAM,
 									_______, _______,  _______, _______),
