@@ -38,3 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define COMBO_TERM_PER_COMBO
 #define COMBO_MUST_PRESS_IN_ORDER_PER_COMBO	
 #define COMBO_SHOULD_TRIGGER
+
+// Try to prevent needing to unplug/replug for keyboard to be recognized sometimes
+#define SPLIT_USB_TIMEOUT 10000
+#define SPLIT_USB_TIMEOUT_POLL 10

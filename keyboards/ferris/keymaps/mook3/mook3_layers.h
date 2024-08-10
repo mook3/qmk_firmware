@@ -3,6 +3,7 @@
 enum layer_number {
   _QWERTY = 0,
   _GAMING,
+  _GAME_CHAT,
   _SYMBOLS,
   _NUMBERS,
   _FN,
@@ -19,6 +20,7 @@ enum custom_keycodes {
 	SFT_BSP,
 	CTL_TAB,
 	MY_SPC_SYM,
+	GAM_OFF,
 };
 
 static uint16_t custom_idle_timer = 0;
