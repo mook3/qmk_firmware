@@ -19,6 +19,10 @@
 // Clone command: git clone --recurse-submodules -j8 https://github.com/mook3/qmk_firmware.git
 // Flash command: qmk flash -kb ferris/sweep -km mook3 -bl uf2-split-left -e CONVERT_TO=promicro_rp2040
 
+// Build/flash with docker (in ~/qmk_firmware):
+// util/docker_build.sh ferris/sweep:mook3 -e CONVERT_TO=promicro_rp2040
+// qmk flash -bl uf2-split-left ferris_sweep_mook3_promicro_rp2040.uf2
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_QWERTY] = LAYOUT(
 KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,					 KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   ,
