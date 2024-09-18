@@ -31,29 +31,35 @@ KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , 			 		 KC_N   , KC_M   , KC_COMM, K
 									CTL_TAB, SFT_BSP,  SYM_SPC, NUM_ENT),
 
 	[_GAMING] = LAYOUT(
-// Shift first 3 columns right 1, move 4th column to left
-KC_R   , KC_Q   , KC_W   , KC_E   , _______, 					 _______, _______, KC_UP  , _______, _______,
+// Shift first 3 columns right 1, move 4th column to left - LALT/LSFT added for favoriting/quick stashing items in terraria...
+KC_LALT, KC_Q   , KC_W   , KC_E   , _______, 					 _______, _______, KC_UP  , _______, _______,
 KC_F   , KC_A   , KC_S   , KC_D   , _______,					 _______, KC_LEFT, KC_DOWN, KC_RGHT, _______,
-KC_V   , KC_Z   , KC_X   , KC_C   , _______,					 _______, _______, _______, _______, _______,
-									KC_BSPC , KC_SPC ,  _______, _______),
+KC_LSFT, KC_Z   , KC_X   , KC_C   , _______,					 _______, _______, _______, _______, _______,
+									KC_LCTL, KC_SPC ,  KC_SPC , MO_GMNM),
 									
 	[_GAME_CHAT] = LAYOUT(
 KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,					 KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   ,
 KC_A   , KC_S   , KC_D   , KC_F   , KC_G   ,					 KC_H   , KC_J   , KC_K   , KC_L   , KC_QUOT,
 KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , 			 		 KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH,
-									CTL_TAB, SFT_BSP,  SYM_SPC, NUM_ENT),
+									KC_LSFT, KC_BSPC,  KC_SPC , MO_GMNM),
 
 	[_SYMBOLS] = LAYOUT(
 KC_AMPR, KC_PLUS, KC_UNDS, KC_LCBR, KC_RCBR, 					 _______, KC_COLN, _______, _______, _______,
-KC_EXLM, KC_EQL, KC_MINS, KC_LPRN, KC_RPRN, 					 _______, KC_SCLN, KC_DLR , KC_AT  , KC_PERC,
+KC_EXLM, KC_EQL , KC_MINS, KC_LPRN, KC_RPRN, 					 _______, KC_SCLN, KC_DLR , KC_AT  , KC_PERC,
 KC_PIPE, KC_ASTR, KC_TILD, KC_LBRC, KC_RBRC,					 _______, KC_GRV , KC_LT  , KC_GT  , KC_BSLS,
 									_______, _______,  _______, _______),
 
 	[_NUMBERS] = LAYOUT(
-_______, KC_1   , KC_2   , KC_3   , KC_PMNS,					 KC_WH_U, KC_HOME, KC_UP  , KC_END , _______,
+KC_PMNS, KC_1   , KC_2   , KC_3   , _______,					 KC_WH_U, KC_HOME, KC_UP  , KC_END , _______,
 KC_0   , KC_4   , KC_5   , KC_6   , _______, 					 KC_WH_D, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL ,
-_______, KC_7   , KC_8   , KC_9   , KC_PENT, 					 _______, KC_TAB , KC_ESC , _______, GAM_OFF,
+KC_PENT, KC_7   , KC_8   , KC_9   , _______, 					 _______, KC_TAB , KC_ESC , _______, _______,
 									_______, _______,  _______, _______),                   // Above key needs to pass-through to DOT
+
+	[_GAME_NUM] = LAYOUT(
+_______, _______, _______, _______, _______,					 _______, _______, GMCH_ON, _______, _______,
+_______, _______, _______, _______, _______, 					 _______, _______, GMCH_OF, _______, _______,
+KC_ENT , _______, _______, _______, _______, 					 _______, _______, _______, _______, GAM_OFF,
+									_______, _______,  _______, _______),
 
 	[_FN] = LAYOUT(
 _______, KC_F1  , KC_F2  , KC_F3  , KC_F10 ,					 KC_BRIU, KC_VOLU, _______, _______, _______,
@@ -83,19 +89,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 		    layer_off(_GAMING);
 			layer_off(_GAME_CHAT);
 			return false;
-		case NUM_ENT:
-		    if (record->tap.count && record->event.pressed && layer_state_is(_GAMING)) {
-				layer_invert(_GAME_CHAT);
-			}
-			// Let QMK handle actual keycode still
-			return true;
-		case KC_T:
-		case KC_G:
+		//case NUM_ENT:
+		//case KC_PENT:
+		case KC_ENT:
+			// Only ENT actually used currently, I think
 		    if (record->event.pressed && layer_state_is(_GAMING)) {
-				layer_on(_GAME_CHAT);
+				// Non mod-tap, or doing tap function of mod-tap
+				if (keycode != NUM_ENT || record->tap.count) {
+				    layer_invert(_GAME_CHAT);
+				}
 			}
 			// Let QMK handle actual keycode still
-			return true;
+			break;
+		case MO_GMNM:
+		    layer_invert(_NUMBERS);
+			layer_invert(_GAME_NUM);
+			return false;
+		case GMCH_ON:
+			layer_on(_GAME_CHAT);
+			return false;
+		case GMCH_OF:
+			layer_off(_GAME_CHAT);
+			return false;
 		default:
 			break;
 	}

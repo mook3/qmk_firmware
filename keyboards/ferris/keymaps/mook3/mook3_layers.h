@@ -6,6 +6,7 @@ enum layer_number {
   _GAME_CHAT,
   _SYMBOLS,
   _NUMBERS,
+  _GAME_NUM,
   _FN,
 };
 
@@ -21,6 +22,9 @@ enum custom_keycodes {
 	CTL_TAB,
 	MY_SPC_SYM,
 	GAM_OFF,
+	MO_GMNM,
+	GMCH_ON,
+	GMCH_OF,
 };
 
 static uint16_t custom_idle_timer = 0;
