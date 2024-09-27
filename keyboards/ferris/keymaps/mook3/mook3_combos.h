@@ -57,8 +57,8 @@ combo_t key_combos[] = {
 	[COMBO_GCS] = COMBO(combo_esft, S(C(KC_LGUI))),
 	[COMBO_AS] = COMBO(combo_ssft, S(KC_LALT)),
 	[COMBO_ACS] = COMBO(combo_wsft, KC_MEH),
-	[COMBO_GAS] = COMBO(combo_actl, S(A(KC_LGUI))),
-	[COMBO_GACS] = COMBO(combo_qctl, KC_HYPR),
+	[COMBO_GAS] = COMBO(combo_asft, S(A(KC_LGUI))),
+	[COMBO_GACS] = COMBO(combo_qsft, KC_HYPR),
 };
 
 bool is_mod_loading_combo(uint16_t index) {
