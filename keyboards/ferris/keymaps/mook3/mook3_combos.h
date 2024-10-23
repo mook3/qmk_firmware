@@ -20,6 +20,8 @@ enum combos {
 	COMBO_GAS,
 	COMBO_GACS, // HYPR
 
+	COMBO_ACF,
+
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
 };
 uint16_t MOD_LOADING_COMBOS_START_IDX = COMBO_FN;
@@ -42,6 +44,8 @@ const uint16_t PROGMEM combo_wsft[] = {KC_W, SFT_BSP, COMBO_END};
 const uint16_t PROGMEM combo_asft[] = {KC_A, SFT_BSP, COMBO_END};
 const uint16_t PROGMEM combo_qsft[] = {KC_Q, SFT_BSP, COMBO_END};
 
+const uint16_t PROGMEM combo_octl[] = {KC_O, CTL_TAB, COMBO_END};
+
 
 combo_t key_combos[] = {
 	[COMBO_FN] = COMBO(combo_fctl, MO(_FN)),
@@ -59,6 +63,8 @@ combo_t key_combos[] = {
 	[COMBO_ACS] = COMBO(combo_wsft, KC_MEH),
 	[COMBO_GAS] = COMBO(combo_asft, S(A(KC_LGUI))),
 	[COMBO_GACS] = COMBO(combo_qsft, KC_HYPR),
+
+	[COMBO_ACF] = COMBO(combo_octl, LM(_FN, MOD_LALT | MOD_LCTL)),
 };
 
 bool is_mod_loading_combo(uint16_t index) {
