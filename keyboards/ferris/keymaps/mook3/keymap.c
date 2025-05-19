@@ -101,6 +101,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 		case GAM_OFF:
 			// Fully disable gaming mode
 		    layer_off(_GAMING);
+			layer_off(_GAMING2);
 			layer_off(_GAME_CHAT);
 			return false;
 		//case NUM_ENT:
