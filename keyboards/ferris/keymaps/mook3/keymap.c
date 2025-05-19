@@ -15,7 +15,8 @@
 #define SYM_SPC LT(_SYMBOLS,KC_SPC)
 #define NUM_ENT LT(_NUMBERS,KC_ENT)
 #define TG_GAM TG(_GAMING)
-#define MO_GAM2 MO(_GAMING2)
+#define TG_GAM2 TG(_GAMING2)
+#define MO_GAM3 MO(_GAMING3)
 
 // Clone command: git clone --recurse-submodules -j8 https://github.com/mook3/qmk_firmware.git
 // Flash command: qmk flash -kb ferris/sweep -km mook3 -bl uf2-split-left -e CONVERT_TO=promicro_rp2040
@@ -33,12 +34,18 @@ KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , 			 		 KC_N   , KC_M   , KC_COMM, K
 
 	[_GAMING] = LAYOUT(
 // Shift first 3 columns right 1, move 4th column to left
-KC_R   , KC_Q   , KC_W   , KC_E   , _______, 					 _______, _______, KC_UP  , _______, _______,
-KC_F   , KC_A   , KC_S   , KC_D   , _______,					 _______, KC_LEFT, KC_DOWN, KC_RGHT, _______,
+KC_R   , KC_Q   , KC_W   , KC_E   , _______, 					 _______, _______, _______, _______, _______,
+KC_F   , KC_A   , KC_S   , KC_D   , _______,					 _______, _______, _______, _______, KC_SCLN,
 KC_V   , KC_Z   , KC_X   , KC_C   , _______,					 _______, _______, _______, _______, _______,
-									MO_GAM2, KC_SPC ,   KC_SPC , MO_GMNM),
+									MO_GAM3, KC_SPC ,   KC_SPC , MO_GMNM),
 
 	[_GAMING2] = LAYOUT(
+_______, _______, _______, _______, _______,					 _______, _______, KC_UP  , _______, _______,
+_______, _______, _______, _______, _______, 					 _______, KC_LEFT, KC_DOWN, KC_RGHT, _______,
+_______, _______, _______, _______, _______, 					 _______, _______, _______, _______, _______,
+									_______, _______,   _______, _______),
+
+	[_GAMING3] = LAYOUT(
 _______, _______, _______, _______, _______,					 _______, _______, _______, _______, _______,
 KC_TAB , KC_LALT, KC_LSFT, KC_LCTL, _______, 					 _______, _______, _______, _______, _______,
 _______, _______, _______, _______, _______, 					 _______, _______, _______, _______, _______,
@@ -63,7 +70,7 @@ KC_PENT, KC_7   , KC_8   , KC_9   , _______, 					 _______, KC_TAB , KC_ESC , __
 									_______, _______,   _______, _______),                  // Above key needs to pass-through to DOT
 
 	[_GAME_NUM] = LAYOUT(
-_______, _______, _______, _______, _______,					 _______, _______, GMCH_ON, _______, _______,
+_______, _______, _______, _______, _______,					 _______, _______, GMCH_ON, _______, TG_GAM2,
 _______, _______, _______, _______, _______, 					 _______, _______, GMCH_OF, _______, _______,
 KC_ENT , _______, _______, _______, _______, 					 _______, _______, _______, _______, GAM_OFF,
 									_______, _______,   _______, _______),

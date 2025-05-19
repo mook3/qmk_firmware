@@ -4,6 +4,7 @@ enum layer_number {
   _QWERTY = 0,
   _GAMING,
   _GAMING2,
+  _GAMING3,
   _GAME_CHAT,
   _SYMBOLS,
   _NUMBERS,
