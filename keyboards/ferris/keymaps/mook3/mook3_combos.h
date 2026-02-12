@@ -20,7 +20,23 @@ enum combos {
 	COMBO_GAS,
 	COMBO_GACS, // HYPR
 
+	COMBO_CF,
+	COMBO_GF,
+	COMBO_GCF,
+	COMBO_AF,
 	COMBO_ACF,
+	COMBO_GAF,
+	COMBO_GACF,
+
+	COMBO_CSF,
+	COMBO_GSF,
+	COMBO_GCSF,
+	COMBO_ASF,
+	COMBO_ACSF, // MEH
+	COMBO_GASF,
+	COMBO_GACSF, // HYPR
+
+	COMBO_SF,
 
     COMBO_LENGTH // nifty trick to avoid manually specifying how many combos you have
 };
@@ -44,8 +60,31 @@ const uint16_t PROGMEM combo_wsft[] = {KC_W, SFT_BSP, COMBO_END};
 const uint16_t PROGMEM combo_asft[] = {KC_A, SFT_BSP, COMBO_END};
 const uint16_t PROGMEM combo_qsft[] = {KC_Q, SFT_BSP, COMBO_END};
 
+const uint16_t PROGMEM combo_jctl[] = {KC_J, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_kctl[] = {KC_K, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_ictl[] = {KC_I, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_lctl[] = {KC_L, CTL_TAB, COMBO_END};
 const uint16_t PROGMEM combo_octl[] = {KC_O, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_quotctl[] = {KC_QUOT, CTL_TAB, COMBO_END};
+const uint16_t PROGMEM combo_pctl[] = {KC_P, CTL_TAB, COMBO_END};
 
+const uint16_t PROGMEM combo_jsft[] = {KC_J, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_ksft[] = {KC_K, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_isft[] = {KC_I, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_lsft[] = {KC_L, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_osft[] = {KC_O, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_quotsft[] = {KC_QUOT, SFT_BSP, COMBO_END};
+const uint16_t PROGMEM combo_psft[] = {KC_P, SFT_BSP, COMBO_END};
+
+const uint16_t PROGMEM combo_usft[] = {KC_U, SFT_BSP, COMBO_END};
+
+/*
+ * -------------------------    -------------------------
+ * | GAC | AC  | GC  |     |    | SF  | GCF | ACF |     |
+ * -------------------------    -------------------------
+ * | GA  | A   | G   |F/CS |    | CF  | GF  | AF  | GAF |
+ * -------------------------    -------------------------
+ */
 
 combo_t key_combos[] = {
 	[COMBO_FN] = COMBO(combo_fctl, MO(_FN)),
@@ -64,7 +103,23 @@ combo_t key_combos[] = {
 	[COMBO_GAS] = COMBO(combo_asft, S(A(KC_LGUI))),
 	[COMBO_GACS] = COMBO(combo_qsft, KC_HYPR),
 
+	[COMBO_CF] = COMBO(combo_jctl, LM(_FN, MOD_LCTL)),
+	[COMBO_GF] = COMBO(combo_kctl, LM(_FN, MOD_LGUI)),
+	[COMBO_GCF] = COMBO(combo_ictl, LM(_FN, MOD_LGUI | MOD_LCTL)),
+	[COMBO_AF] = COMBO(combo_lctl, LM(_FN, MOD_LALT)),
 	[COMBO_ACF] = COMBO(combo_octl, LM(_FN, MOD_LALT | MOD_LCTL)),
+	[COMBO_GAF] = COMBO(combo_quotctl, LM(_FN, MOD_LGUI | MOD_LALT)),
+	[COMBO_GACF] = COMBO(combo_pctl, LM(_FN, MOD_LGUI | MOD_LALT | MOD_LCTL)),
+
+	[COMBO_CSF] = COMBO(combo_jsft, LM(_FN, MOD_LCTL | MOD_LSFT)),
+	[COMBO_GSF] = COMBO(combo_ksft, LM(_FN, MOD_LGUI | MOD_LSFT)),
+	[COMBO_GCSF] = COMBO(combo_isft, LM(_FN, MOD_LGUI | MOD_LCTL | MOD_LSFT)),
+	[COMBO_ASF] = COMBO(combo_lsft, LM(_FN, MOD_LALT | MOD_LSFT)),
+	[COMBO_ACSF] = COMBO(combo_osft, LM(_FN, MOD_MEH)),
+	[COMBO_GASF] = COMBO(combo_quotsft, LM(_FN, MOD_LGUI | MOD_LALT | MOD_LSFT)),
+	[COMBO_GACSF] = COMBO(combo_psft, LM(_FN, MOD_HYPR)),
+
+	[COMBO_SF] = COMBO(combo_usft, LM(_FN, MOD_LSFT)),
 };
 
 bool is_mod_loading_combo(uint16_t index) {
